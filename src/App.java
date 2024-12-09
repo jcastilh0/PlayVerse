@@ -379,6 +379,8 @@ public class App {
     }
     
     private static void jogarAdivinheONumero() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo ao Adivinhe o Número!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Adivinhe o Número é um jogo de dedução e sorte. Um número é escolhido aleatoriamente.");
@@ -407,6 +409,8 @@ public class App {
     }
     
     private static void jogarJogoDaVelha() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo ao Jogo da Velha!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Jogo da Velha é um jogo de estratégia simples para dois jogadores.");
@@ -435,6 +439,8 @@ public class App {
     }
     
     private static void jogarCorridaDeDados() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo à Corrida de Dados!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Corrida de Dados é um jogo simples onde você compete contra o computador.");
@@ -463,6 +469,8 @@ public class App {
     }
     
     private static void jogarQuiz() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo ao Quiz de Perguntas e Respostas!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Teste seus conhecimentos em diversas áreas com perguntas de múltipla escolha.");
@@ -490,6 +498,8 @@ public class App {
     }
     
     private static void jogarCalculoMental() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo ao Cálculo Mental Rápido!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Resolva operações matemáticas simples em um curto período de tempo.");
@@ -518,6 +528,8 @@ public class App {
     }
     
     private static void jogarCacaAoTesouro() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo à Caça ao Tesouro!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Encontre o tesouro escondido em um tabuleiro de coordenadas.");
@@ -545,6 +557,8 @@ public class App {
     }
     
     private static void jogarSimuladorDeLabirinto() {
+
+        System.out.println("\n");
         System.out.println("Bem-vindo ao Simulador de Labirinto!");
         System.out.println("\nSobre o jogo:");
         System.out.println("\n Navegue por um labirinto representado por texto.");
