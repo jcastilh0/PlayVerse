@@ -100,11 +100,17 @@ public class App {
                     jogarBlackjack(usuarioAtual, logado, usuarioAtual);
                     break;
                 case 3:
-                System.out.println("\nCatálogo de jogos:");
+                System.out.println();
+                System.out.println(" ██████╗ █████╗ ████████╗ █████╗ ██╗      ██████╗  ██████╗  ██████╗ ");
+                System.out.println("██╔════╝██╔══██╗╚══██╔══╝██╔══██╗██║     ██╔═══██╗██╔════╝ ██╔═══██╗");
+                System.out.println("██║     ███████║   ██║   ███████║██║     ██║   ██║██║  ███╗██║   ██║");
+                System.out.println("██║     ██╔══██║   ██║   ██╔══██║██║     ██║   ██║██║   ██║██║   ██║");
+                System.out.println("╚██████╗██║  ██║   ██║   ██║  ██║███████╗╚██████╔╝╚██████╔╝╚██████╔╝");
+                System.out.println(" ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝ ");
+                System.out.println();
                 for (String jogo : catalogoJogos()) {
                     System.out.println(jogo);
                 }
-                System.out.println();
                     System.out.println("\nEscolha um jogo ou digite 0 para voltar:");
                     
                     int opcaoCatalogo = lerInteiro();
@@ -270,6 +276,8 @@ public class App {
         System.out.println(" Você tem um número limitado de tentativas, então escolha com sabedoria!");
         System.out.println(" Mostre suas habilidades e descubra a palavra antes que seja tarde demais!");
         System.out.println("\n");
+        System.out.println("O tema é: Tecnologia");
+        System.out.println("\n");
         boolean sair = false;
 
         while (!sair) {
@@ -341,7 +349,6 @@ public class App {
     private static void iniciarPartidaForca() {
         Forca forca = new Forca();
         forca.iniciarPartida();
-        
     }
 
     private static void iniciarPartidaBlackjack(String jogador){

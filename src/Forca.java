@@ -4,12 +4,17 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Forca {
-    private String palavraSecreta;
-    private final Set<Character> letrasAdivinhadas = new HashSet<>();
-    private int tentativasRestantes = 6;
 
     public Forca() {
     }
+
+    public Forca(String palavraSecreta) {
+        this.palavraSecreta = palavraSecreta.toLowerCase();
+    }
+
+    private String palavraSecreta;
+    private final Set<Character> letrasAdivinhadas = new HashSet<>();
+    private int tentativasRestantes = 6;
 
     public boolean jogar(char letra) {
         if (!letrasAdivinhadas.contains(letra)) {
@@ -41,10 +46,10 @@ public class Forca {
     public void iniciarPartida(){
         Scanner sc = new Scanner(System.in);
         
-            try {
+        try {
             String palavraSecreta = PalavraSecretaManager.selecionarPalavraAleatoria();
             this.palavraSecreta = palavraSecreta.toLowerCase();   
-             
+            
             while (getTentativasRestantes() > 0 && !ganhou()) {
                 System.out.println("\nPalavra: " + palavraRevelada());
                 System.out.println("Tentativas restantes: " + getTentativasRestantes());
@@ -56,9 +61,15 @@ public class Forca {
                     continue;
                 }
     
+                // Verifica se a entrada é uma letra e não um número ou outro caractere
+                if (!input.matches("[a-zA-Z]")) {
+                    System.out.println("Entrada inválida! Digite apenas letras.");
+                    continue;
+                }
+    
                 char letra = input.charAt(0);
     
-                if (!jogar(letra)&&!ganhou()) {
+                if (!jogar(letra) && !ganhou()) {
                     System.out.println("Letra já foi usada ou não está correta.");
                 }
     
@@ -95,5 +106,4 @@ public class Forca {
             System.out.println("Erro ao acessar o banco de palavras: " + e.getMessage());
         }
     }
-
 }

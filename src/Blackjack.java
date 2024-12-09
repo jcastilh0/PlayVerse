@@ -24,13 +24,8 @@ public class Blackjack {
             try {
                 iniciarRodada();
 
-                
                 if (verificarBlackjackNatural(jogador)) {
-                    System.out.println("\n");
-                    System.out.print("Deseja jogar outra rodada? [1] Sim [2] Não: ");
-                    int resposta = scanner.nextInt();
-                    scanner.nextLine();
-                    continuarJogando = resposta == 1;
+                    continuarJogando = perguntarNovaRodada();
                     continue;
                 }
 
@@ -40,16 +35,21 @@ public class Blackjack {
                 while (jogadorAtivo || dealerAtivo) {
                     if (jogadorAtivo) {
                         mostrarCartasJogador();
-                        System.out.println("\n");
-                        System.out.print("Você quer continuar tentando a sorte ou quer parar a rodada por aqui? ([1] Continuar ou [2] Parar)? ");
-                        int escolha = scanner.nextInt();
-                        scanner.nextLine();
+                        int escolha = obterEscolha("\nVocê quer continuar ou parar? ([1] Continuar, [2] Parar): ", 1, 2);
 
                         if (escolha == 1) {
                             maoJogador.add(baralho.distribuir());
                             if (calcularPontuacao(maoJogador) > 21) {
-                                System.out.println("\n");
-                                System.out.println("Você estourou! BUUMM!");
+                                System.out.println("                          *        *     ");
+                                System.out.println("   (                    (  `     (  `    ");
+                                System.out.println(" ( )\\      (       (    )\\))(    )\\))(   ");
+                                System.out.println(" )((_)     )\\      )\\  ((_)()\\  ((_)()\\  ");
+                                System.out.println("((_)_   _ ((_)  _ ((_) (_()((_) (_()((_) ");
+                                System.out.println(" | _ ) | | | | | | | | |  \\/  | |  \\/  | ");
+                                System.out.println(" | _ \\ | |_| | | |_| | | |\\/| | | |\\/| | ");
+                                System.out.println(" |___/  \\___/   \\___/  |_|  |_| |_|  |_| ");
+                                System.out.println("                                          ");
+                                System.out.println("\nVocê estourou! BUUMM!");
                                 jogadorAtivo = false;
                             }
                         } else {
@@ -67,16 +67,10 @@ public class Blackjack {
                 }
 
                 mostrarResultados(jogador);
-                System.out.println("\n");
-                System.out.print("Deseja jogar outra rodada? [1] Sim [2] Não: ");
-                int resposta = scanner.nextInt();
-                scanner.nextLine();
-                continuarJogando = resposta == 1;
-
+                continuarJogando = perguntarNovaRodada();
             } catch (InputMismatchException e) {
-                System.out.println("\n");
-                System.out.println("Entrada inválida! Certifique-se de digitar números.");
-                scanner.nextLine();
+                System.out.println("\nEntrada inválida! Digite números.");
+                scanner.nextLine(); // Limpa a entrada incorreta
             } catch (Exception e) {
                 System.out.println("Erro inesperado: " + e.getMessage());
             }
@@ -98,109 +92,45 @@ public class Blackjack {
         int pontuacaoDealer = calcularPontuacao(maoDealer);
 
         if (pontuacaoJogador == 21 && pontuacaoDealer == 21) {
-            System.out.println("\n");
-            mostrarCartas(maoJogador, "Sua mão final");
-            mostrarCartas(maoDealer, "Mão do dealer");
-            System.out.println("Empate! Ambos têm Blackjack.");
+            mostrarEmpate();
             return true;
         } else if (pontuacaoJogador == 21) {
-            System.out.println("\n");
-            mostrarCartas(maoJogador, "Sua mão final");
-            System.out.println("\n");
-            System.out.println(".------..------..------..------..------..------.");
-            System.out.println("|G.--. ||A.--. ||N.--. ||H.--. ||O.--. ||U.--. |");
-            System.out.println("| :/\\: || (\\/) || :(): || :/\\: || :/\\: || (\\/) |");
-            System.out.println("| :\\/: || :\\/: || ()() || (__) || :\\/: || :\\/: |");
-            System.out.println("| '--'G|| '--'A|| '--'N|| '--'H|| '--'O|| '--'U|");
-            System.out.println("`------'`------'`------'`------'`------'`------'");
-            System.out.println("\n");   
-            System.out.println("Você tem um Blackjack natural! Parabéns! Pode apostar na loteria porque sua sorte está ótima HAHA!");
-            try {
-                PontuacaoManager.salvarPontuacao(jogador, pontuacaoJogador);
-            } catch (IOException e) {
-                System.out.println("\n");
-                System.out.println("Erro ao salvar a pontuação: " + e.getMessage());
-            }
+            mostrarVitoria(jogador, pontuacaoJogador);
             return true;
         } else if (pontuacaoDealer == 21) {
-            System.out.println("\n");
-            mostrarCartas(maoJogador, "Sua mão final");
-            mostrarCartas(maoDealer, "Mão do dealer");
-            System.out.println("\n");
-            System.out.println(".------..------..------..------..------..------.");
-            System.out.println("|P.--. ||E.--. ||R.--. ||D.--. ||E.--. ||U.--. |");
-            System.out.println("| :/\\: || (\\/) || :(): || :/\\: || (\\/) || (\\/) |");
-            System.out.println("| (__) || :\\/: || ()() || (__) || :\\/: || :\\/: |");
-            System.out.println("| '--'P|| '--'E|| '--'R|| '--'D|| '--'E|| '--'U|");
-            System.out.println("`------'`------'`------'`------'`------'`------'");
-            System.out.println("\n");
-            System.out.println("O dealer tem um Blackjack natural. Você perdeu. Tente de novo que sua sorte melhora.");
+            mostrarDerrota();
             return true;
         }
         return false;
     }
 
     private void mostrarCartasJogador() {
-
-        System.out.println("\n");
-        System.out.println("══════════════════════════════════════════════════════════");
+        System.out.println("\n══════════════════════════════════════════════════════════");
         System.out.println("    Suas Cartas: " + maoJogador);
         System.out.println("    Sua Pontuação: " + calcularPontuacao(maoJogador));
-        System.out.println("══════════════════════════════════════════════════════════");
         System.out.println("    Carta visível do dealer: " + maoDealer.get(0));
         System.out.println("══════════════════════════════════════════════════════════");
-
     }
 
     private void mostrarResultados(String jogador) {
         int pontuacaoJogador = calcularPontuacao(maoJogador);
         int pontuacaoDealer = calcularPontuacao(maoDealer);
 
-        System.out.println("\n");
+        System.out.println("\n══════════════════════════════════════════════════════════");
         mostrarCartas(maoJogador, "Sua mão final");
-        mostrarCartas(maoDealer, "Mão do dealer (completa)");
-
-        System.out.println("\n");
+        mostrarCartas(maoDealer, "Mão do dealer");
         System.out.println("Sua pontuação: " + pontuacaoJogador);
         System.out.println("Pontuação do dealer: " + pontuacaoDealer);
+        System.out.println("══════════════════════════════════════════════════════════");
 
-        if (pontuacaoJogador > 21 || (pontuacaoDealer <= 21 && pontuacaoDealer > pontuacaoJogador)) {
-            System.out.println("\n");
-            System.out.println(".------..------..------..------..------..------.");
-            System.out.println("|P.--. ||E.--. ||R.--. ||D.--. ||E.--. ||U.--. |");
-            System.out.println("| :/\\: || (\\/) || :(): || :/\\: || (\\/) || (\\/) |");
-            System.out.println("| (__) || :\\/: || ()() || (__) || :\\/: || :\\/: |");
-            System.out.println("| '--'P|| '--'E|| '--'R|| '--'D|| '--'E|| '--'U|");
-            System.out.println("`------'`------'`------'`------'`------'`------'");
-            System.out.println("\n");
-            System.out.println("Parece que está sem sorte!");
+        if (pontuacaoJogador > 21 && pontuacaoDealer > 21) {
+            mostrarEmpate();  // Ambos estouraram, é empate
+        } else if (pontuacaoJogador > 21 || (pontuacaoDealer <= 21 && pontuacaoDealer > pontuacaoJogador)) {
+            mostrarDerrota(); // Jogador estourou ou dealer tem mais pontos
         } else if (pontuacaoJogador == pontuacaoDealer) {
-            System.out.println("\n");
-            System.out.println(".------..------..------..------..------..------.");
-            System.out.println("|E.--. ||M.--. ||P.--. ||A.--. ||T.--. ||E.--. |");
-            System.out.println("| (\\/) || (\\/) || :/\\: || (\\/) || :/\\: || (\\/) |");
-            System.out.println("| :\\/: || :\\/: || (__) || :\\/: || (__) || :\\/: |");
-            System.out.println("| '--'E|| '--'M|| '--'P|| '--'A|| '--'T|| '--'E|");
-            System.out.println("`------'`------'`------'`------'`------'`------'");
-            System.out.println("\n");
-
-            System.out.println("Empate! Com empate ninguém ganha e ninguém perde, só que todo mundo perde porque ninguém ganha! HAHAHA");
+            mostrarEmpate();  // Empate quando as pontuações são iguais
         } else {
-            System.out.println("\n");
-            System.out.println(".------..------..------..------..------..------.");
-            System.out.println("|G.--. ||A.--. ||N.--. ||H.--. ||O.--. ||U.--. |");
-            System.out.println("| :/\\: || (\\/) || :(): || :/\\: || :/\\: || (\\/) |");
-            System.out.println("| :\\/: || :\\/: || ()() || (__) || :\\/: || :\\/: |");
-            System.out.println("| '--'G|| '--'A|| '--'N|| '--'H|| '--'O|| '--'U|");
-            System.out.println("`------'`------'`------'`------'`------'`------'");
-            System.out.println("\n");   
-            System.out.println("Olha a sorte está do seu lado, parabéns! Jogue mais uma rodada!");
-            try {
-                PontuacaoManager.salvarPontuacao(jogador, pontuacaoJogador);
-            } catch (IOException e) {
-                System.out.println("\n");
-                System.out.println("Erro ao salvar a pontuação: " + e.getMessage());
-            }
+            mostrarVitoria(jogador, pontuacaoJogador);  // Jogador vence
         }
     }
 
@@ -226,7 +156,6 @@ public class Blackjack {
             pontuacao -= 10;
             ases--;
         }
-
         return pontuacao;
     }
 
@@ -234,4 +163,71 @@ public class Blackjack {
         System.out.println(titulo + ": " + mao);
     }
 
+    private int obterEscolha(String mensagem, int opcaoMin, int opcaoMax) {
+        int escolha;
+        while (true) {
+            try {
+                System.out.print(mensagem);
+                escolha = scanner.nextInt();
+                if (escolha >= opcaoMin && escolha <= opcaoMax) {
+                    break;
+                } else {
+                    System.out.println("Escolha inválida! Digite uma opção entre " + opcaoMin + " e " + opcaoMax + ".");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida! Certifique-se de digitar um número.");
+                scanner.nextLine(); // Limpa a entrada
+            }
+        }
+        return escolha;
+    }
+
+    private boolean perguntarNovaRodada() {
+        return obterEscolha("Deseja jogar outra rodada? [1] Sim [2] Não: ", 1, 2) == 1;
+    }
+
+    private void mostrarEmpate() {
+        System.out.println("\n");
+        System.out.println(".------..------..------..------..------..------.");
+        System.out.println("|E.--. ||M.--. ||P.--. ||A.--. ||T.--. ||E.--. |");
+        System.out.println("| (\\/) || (\\/) || :/\\: || (\\/) || :/\\: || (\\/) |");
+        System.out.println("| :\\/ :|| :\\/ :|| (__) || :\\/ :|| (__) || :\\/ :|");
+        System.out.println("| '--'E|| '--'M|| '--'P|| '--'A|| '--'T|| '--'E|");
+        System.out.println("`------'`------'`------'`------'`------'`------'");        
+        System.out.println("\n");
+        System.out.println("Empate! Com empate ninguém ganha e ninguém perde, só que todo mundo perde porque ninguém ganha! HAHAHA");
+        System.out.println();
+    }
+
+    private void mostrarVitoria(String jogador, int pontuacaoJogador) {
+        System.out.println("\n");
+        System.out.println(".------..------..------..------..------..------.");
+        System.out.println("|G.--. ||A.--. ||N.--. ||H.--. ||O.--. ||U.--. |");
+        System.out.println("| :/\\: || (\\/) || :(): || :/\\: || :/\\: || (\\/) |");
+        System.out.println("| :\\/ :|| :\\/ :|| ()() || (__) || :\\/ :|| :\\/ :|");
+        System.out.println("| '--'G|| '--'A|| '--'N|| '--'H|| '--'O|| '--'U|");
+        System.out.println("`------'`------'`------'`------'`------'`------'");        
+        System.out.println("\n");   
+        System.out.println("Parabéns! Você venceu com " + pontuacaoJogador + " pontos!");
+        System.out.println();
+        try {
+            PontuacaoManager.salvarPontuacao(jogador, pontuacaoJogador);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar a pontuação: " + e.getMessage());
+        }
+    }
+
+    private void mostrarDerrota() {
+        System.out.println("\n");
+        System.out.println(".------..------..------..------..------..------.");
+        System.out.println("|P.--. ||E.--. ||R.--. ||D.--. ||E.--. ||U.--. |");
+        System.out.println("| :/\\: || (\\/) || :(): || :/\\: || (\\/) || (\\/) |");
+        System.out.println("| (__) || :\\/: || ()() || (__) || :\\/: || :\\/: |");
+        System.out.println("| '--'P|| '--'E|| '--'R|| '--'D|| '--'E|| '--'U|");
+        System.out.println("`------'`------'`------'`------'`------'`------'");
+        System.out.println("\n");
+        System.out.println("Parece que está sem sorte! Tente novamente.");
+        System.out.println();
+
+    }
 }
