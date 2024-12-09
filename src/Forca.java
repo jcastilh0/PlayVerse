@@ -16,14 +16,19 @@ public class Forca {
     private final Set<Character> letrasAdivinhadas = new HashSet<>();
     private int tentativasRestantes = 6;
 
-    public boolean jogar(char letra) {
-        if (!letrasAdivinhadas.contains(letra)) {
-            letrasAdivinhadas.add(letra);
-            if (!palavraSecreta.contains(String.valueOf(letra))) {
-                tentativasRestantes--;
-            }
+    public String jogar(char letra) {
+        if (letrasAdivinhadas.contains(letra)) {
+            return "Letra já foi usada.";
         }
-        return tentativasRestantes > 0 && !palavraRevelada().equals(palavraSecreta);
+
+        letrasAdivinhadas.add(letra);
+
+        if (!palavraSecreta.contains(String.valueOf(letra))) {
+            tentativasRestantes--;
+            return "Letra incorreta.";
+        }
+
+        return "Letra correta.";
     }
 
     public String palavraRevelada() {
@@ -42,65 +47,72 @@ public class Forca {
         return palavraRevelada().equals(palavraSecreta);
     }
 
+    public void exibirMensagemTentativas() {
+        switch (tentativasRestantes) {
+            case 5:
+                System.out.println("Você perdeu um braço!");
+                break;
+            case 4:
+                System.out.println("Você perdeu outro braço!");
+                break;
+            case 3:
+                System.out.println("Você perdeu uma perna!");
+                break;
+            case 2:
+                System.out.println("Você perdeu outra perna!");
+                break;
+            case 1:
+                System.out.println("Só sobrou sua cabeça!");
+                break;
+            case 0:
+                System.out.println("Você perdeu!");
+                break;
+            default:
+                break;
+        }
+    }
+
     @SuppressWarnings("resource")
-    public void iniciarPartida(){
+    public void iniciarPartida() {
         Scanner sc = new Scanner(System.in);
-        
+
         try {
             String palavraSecreta = PalavraSecretaManager.selecionarPalavraAleatoria();
-            this.palavraSecreta = palavraSecreta.toLowerCase();   
-            
+            this.palavraSecreta = palavraSecreta.toLowerCase();
+
             while (getTentativasRestantes() > 0 && !ganhou()) {
                 System.out.println("\nPalavra: " + palavraRevelada());
                 System.out.println("Tentativas restantes: " + getTentativasRestantes());
                 System.out.print("Digite uma letra: ");
                 String input = sc.nextLine().toLowerCase();
-    
+
                 if (input.isEmpty() || input.length() > 1) {
                     System.out.println("Entrada inválida! Digite apenas uma letra.");
                     continue;
                 }
-    
-                // Verifica se a entrada é uma letra e não um número ou outro caractere
+
                 if (!input.matches("[a-zA-Z]")) {
                     System.out.println("Entrada inválida! Digite apenas letras.");
                     continue;
                 }
-    
+
                 char letra = input.charAt(0);
-    
-                if (!jogar(letra) && !ganhou()) {
-                    System.out.println("Letra já foi usada ou não está correta.");
-                }
-    
+
+                String resultado = jogar(letra);
+                System.out.println(resultado);
+
+                exibirMensagemTentativas();
+
                 if (ganhou()) {
                     System.out.println("\n");
-                    System.out.println("  ____        _         ____         _         ____   U _____ u   _   _       ____     ");
-                    System.out.println("U|  _\"\\ u U  /\"\\  u  U |  _\"\\ u  U  /\"\\  u  U | __\")u \\| ___\"|/  | \\ |\"|     / __\"| u  ");
-                    System.out.println("\\| |_) |/  \\/ _ \\/    \\| |_) |/   \\/ _ \\/    \\|  _ \\/  |  _|\"   <|  \\| |>   <\\___ \\/   ");
-                    System.out.println(" |  __/    / ___ \\     |  _ <     / ___ \\     | |_) |  | |___   U| |\\  |u    u___) |   ");
-                    System.out.println(" |_|      /_/   \\_\\    |_| \\_\\   /_/   \\_\\    |____/   |_____|   |_| \\_|     |____/>>  ");
-                    System.out.println(" ||>>_     \\\\    >>    //   \\\\_   \\\\    >>   _|| \\\\_   <<   >>   ||   \\\\,-.   )(  (__) ");
-                    System.out.println("(__)__)   (__)  (__)  (__)  (__) (__)  (__) (__) (__) (__) (__)  (_\")  (_/   (__)      ");
-                    System.out.println("\n");
                     System.out.println("Você venceu! A palavra era: " + palavraSecreta);
-                    System.out.println("\n");
                     return;
                 }
             }
-    
+
             if (getTentativasRestantes() == 0) {
                 System.out.println("\n");
-                System.out.println("  ____    U _____ u    ____       ____    U _____ u    _   _  ");
-                System.out.println("U|  _\"\\ u \\| ___\"|/ U |  _\"\\ u   |  _\"\\   \\| ___\"|/ U |\"|u| | ");
-                System.out.println("\\| |_) |/  |  _|\"    \\| |_) |/  /| | | |   |  _|\"    \\| |\\| | ");
-                System.out.println(" |  __/    | |___     |  _ <    U| |_| |\\  | |___     | |_| | ");
-                System.out.println(" |_|       |_____|    |_| \\_\\    |____/ u  |_____|   <<\\___/  ");
-                System.out.println(" ||>>_     <<   >>    //   \\\\_    |||_     <<   >>  (__) )(   ");
-                System.out.println("(__)__)   (__) (__)  (__)  (__)  (__)_)   (__) (__)     (__)  ");
-                System.out.println("\n");
-
-                System.out.println("Que pena! A palavra era: " + palavraSecreta);
+                System.out.println("Você perdeu! A palavra era: " + palavraSecreta);
             }
         } catch (IOException e) {
             System.out.println("Erro ao acessar o banco de palavras: " + e.getMessage());
