@@ -56,20 +56,15 @@ A plataforma permite que os usuários se divirtam, compitam e acompanhem seu pro
 - GitHub: [jcastilh0 ]
 
 ### Karoline
-- E-mail de contato: @gmail.com
 - LinkedIn: [Karoline Albuquerque] (www.linkedin.com/in/)
 - GitHub: [karolAlbuquerque]
 
 ### Gabriel Ykaro
-- E-mail de contato: @gmail.com
 - LinkedIn: [Gabriel] (www.linkedin.com/in/)
 - GitHub: [ScarletYkaro10]
 
 ### Raira Agnes
-- E-mail de contato: @gmail.com
 - LinkedIn: [Raira] (www.linkedin.com/in/)
-- GitHub: []
-
 
 
 
